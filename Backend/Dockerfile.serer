@@ -1,0 +1,22 @@
+# Basis-Image für Node.js
+FROM node:18
+
+# Verzeichnis im Container erstellen
+WORKDIR /app
+
+# Paketlisten kopieren und Abhängigkeiten installieren
+COPY package*.json ./
+RUN npm install
+
+# Whisper-Abhängigkeiten installieren
+RUN apt-get update && apt-get install -y python3 python3-pip ffmpeg
+RUN pip3 install openai-whisper
+
+# App-Code kopieren
+COPY . .
+
+# Port freigeben
+EXPOSE 5000
+
+# Server starten
+CMD ["node", "server.js"]
