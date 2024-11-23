@@ -1,28 +1,26 @@
-# Basis-Image für Node.js
-FROM node:18
+# Use an official Python base image
+FROM python:3.11-slim
 
-# Verzeichnis im Container erstellen
+# Set the working directory
 WORKDIR /app
 
-# Paketlisten kopieren und Abhängigkeiten installieren
-COPY package*.json ./
-RUN npm install
-
-# Install required system packages
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    python3 python3-pip python3-dev build-essential ffmpeg
+    ffmpeg build-essential python3-dev python3-venv
 
-# Upgrade pip to the latest version
-RUN pip3 install --upgrade pip
+# Create and activate a virtual environment
+RUN python3 -m venv /opt/venv
+RUN /opt/venv/bin/pip install --upgrade pip
+RUN /opt/venv/bin/pip install openai-whisper
 
-# Install openai-whisper with no cache to avoid issues
-RUN pip3 install --no-cache-dir openai-whisper
+# Add virtual environment to PATH
+ENV PATH="/opt/venv/bin:$PATH"
 
-# App-Code kopieren
+# Copy application code
 COPY . .
 
-# Port freigeben
+# Expose application port
 EXPOSE 5000
 
-# Server starten
-CMD ["node", "server.js"]
+# Set the default command
+CMD ["python3", "your_script.py"]
