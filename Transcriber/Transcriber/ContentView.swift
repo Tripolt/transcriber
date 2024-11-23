@@ -101,7 +101,7 @@ struct ContentView: View {
         self.isUploading = true
 
         let fileURL = recording.fileURL
-        let url = URL(string: "http://localhost:8200/upload")! // Passen Sie die URL an
+        let url = URL(string: "https://transcribe.sogehttechnik.stream/upload")! // Passen Sie die URL an
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
 
